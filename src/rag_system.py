@@ -5,6 +5,7 @@ from langchain_community.tools.tavily_search import TavilySearchResults
 
 from dotenv import load_dotenv
 from utils import *
+import os
 
 
 load_dotenv()
@@ -35,11 +36,13 @@ def retrieve(state):
         state(dict): The state of the graph with the retrieved documents in a new key.    
     """
     question= state["question"]
-    retriever = stock_vector_store.as_retriever(
-        search_type="mmr",
-        search_kwargs={"k":7, "fetch_k":20, "lambda_mult":0}
+    documents = stock_vector_store.similarity_search(
+        query=question,
+        k=20,
         )
-    documents = retriever.invoke(question)
+    with open('output.txt', 'w') as file:
+        for item in documents:
+            file.write(item.page_content + '\n')
     return {"documents": documents ,  "question": question }
 
 def grade_documents(state: State):
@@ -125,8 +128,8 @@ def generate(state:State):
         """
         question = state["question"]
         documents = state["documents"]
-        # top_contexts = [doc.page_content for doc in documents]
-        generation = generation_chain.invoke({"question": question, "context": documents})
+        top_contexts = [doc.page_content for doc in documents]
+        generation = generation_chain.invoke({"question": question, "context": top_contexts})
         return {"generation": generation, "question": question , "documents": documents }
 
 def grade_generation_v_documents_and_question(state):
@@ -146,7 +149,7 @@ def grade_generation_v_documents_and_question(state):
     generation = state["generation"]
 
     score = hallucination_grader_agent.invoke(
-        {"question":question, "documents": documents, "generation": generation}
+        {"documents": documents, "generation": generation}
     )
     grade = score.binary_score
 
@@ -154,15 +157,15 @@ def grade_generation_v_documents_and_question(state):
     if grade == "yes":
         print("---DECISION: GENERATION IS GROUNDED IN DOCUMENTS---")
         # Check question-answering
-        print("---GRADE GENERATION vs QUESTION---")
-        score = answer_grader_agent.invoke({"question": question, "generation": generation})
-        grade = score.binary_score
-        if grade == "yes":
-            print("---DECISION: GENERATION ADDRESSES QUESTION---")
-            return "useful"
-        else:
-            print("---DECISION: GENERATION DOES NOT ADDRESS QUESTION---")
-            return "not useful"
+        # print("---GRADE GENERATION vs QUESTION---")
+        # score = answer_grader_agent.invoke({"question": question, "generation": generation})
+        # grade = score.binary_score
+        # if grade == "yes":
+        #     print("---DECISION: GENERATION ADDRESSES QUESTION---")
+        return "useful"
+        # else:
+        #     print("---DECISION: GENERATION DOES NOT ADDRESS QUESTION---")
+        #     return "not useful"
     else:
         print("---DECISION: GENERATION IS NOT GROUNDED IN DOCUMENTS, RE-TRY---")
         return "not supported"
@@ -201,7 +204,6 @@ def create_workflow():
             {
                 "web_search": "web_search",
                 "vectorstore": "retrieve",
-                "generate": "generate",
             }   
         )
     workflow.add_conditional_edges(
@@ -209,8 +211,8 @@ def create_workflow():
         grade_generation_v_documents_and_question,
         {
              "useful": END,
-             "not useful": "transform_query",   
-             "not supported": "generate",
+            #  "not useful": "transform_query",   
+             "not supported": "transform_query",
              
         }
     )

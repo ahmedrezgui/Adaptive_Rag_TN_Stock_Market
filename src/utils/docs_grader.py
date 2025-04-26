@@ -23,7 +23,6 @@ chat_model = ChatOllama(model="deepseek-r1:1.5b", temperature=0)
 
 
 
-
 # Apply structured output to the model
 structured_llm_grader = chat_model.with_structured_output(GradeDocuments)
 

@@ -17,8 +17,7 @@ prompt = ChatPromptTemplate.from_messages(
             Synthesize the retrieved information into a concise and coherent response based on the user question.\n
             Keep the response short and to the point, avoiding unnecessary details.\n
             If you are not able to retrieve the information then respond with "I\'m sorry, I couldn\'t find the information 
-            you\'re looking for.
-            if the user is greeting then respond with 'Hello! How can i help you?' without using the provided context""",),
+            you\'re looking for.""",),
             (
             "human",
             """ 
@@ -29,6 +28,6 @@ prompt = ChatPromptTemplate.from_messages(
 ]
 )
 
-generative_llm= ChatGoogleGenerativeAI(model=model_name, temperature=0.8)
+generative_llm= ChatGoogleGenerativeAI(model=model_name, temperature=0)
 
 generation_chain= prompt | generative_llm | StrOutputParser()

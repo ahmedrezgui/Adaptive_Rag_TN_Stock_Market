@@ -1,5 +1,6 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
+from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic import BaseModel, Field
 
 import dotenv
@@ -19,7 +20,7 @@ class GradeHallucinations(BaseModel):
 
 
 # LLM with function call
-llm = ChatOllama(model="gemma3:4b-it-qat", temperature=0)
+llm = ChatGoogleGenerativeAI(model=model_name, temperature=0)
 structured_llm_grader = llm.with_structured_output(GradeHallucinations)
 
 # Prompt
@@ -29,7 +30,7 @@ system = """You are a grader assessing whether an LLM generation is grounded in 
 hallucination_prompt = ChatPromptTemplate.from_messages(
     [
         ("system", system),
-        ("human", "Set of facts: \n\n {documents} \n\n User question:{question} \n\n LLM generation: {generation}"),
+        ("human", "Set of facts: \n\n {documents} \n\n LLM generation: {generation}"),
     ]
 )
 
