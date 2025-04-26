@@ -5,7 +5,7 @@ from langchain_community.tools.tavily_search import TavilySearchResults
 
 from dotenv import load_dotenv
 from utils import *
-import os
+
 
 
 load_dotenv()
@@ -40,9 +40,6 @@ def retrieve(state):
         query=question,
         k=20,
         )
-    with open('output.txt', 'w') as file:
-        for item in documents:
-            file.write(item.page_content + '\n')
     return {"documents": documents ,  "question": question }
 
 def grade_documents(state: State):
