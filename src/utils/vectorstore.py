@@ -16,10 +16,11 @@ from markitdown import MarkItDown
 
 load_dotenv()
 
-model_name = os.environ.get('LLM_MODEL')
+
 data_path = os.environ.get('DATA_PATH')
 db_location=os.environ.get('CHROMA_DB')
 db_exists = os.path.exists(db_location)
+
 
 
 def process_stock_data(stock_data_dir):
@@ -34,7 +35,6 @@ def process_stock_data(stock_data_dir):
     """
     stock_data = []
     for file in os.listdir(stock_data_dir):
-        print(f"Processing file: {file}")
         file_path = os.path.join(stock_data_dir, file)
         df= pd.read_csv(file_path)
         df['text']= df.apply(lambda row: f"Stock {row['stock']} on date {row['date']}, opening price {row['ouverture']:.2f}, closing price {row['cloture']:.2f}, volume {row['volume']:,.2f}.", axis=1)
@@ -107,7 +107,7 @@ def process_urls(urls) -> list[Document]:
 
 
 
-embedding_model = GoogleGenerativeAIEmbeddings(model=model_name) 
+embedding_model = GoogleGenerativeAIEmbeddings(model ="models/embedding-001") 
 
 
 urls = ("https://www.ilboursa.com/marches/le-directeur-general-de-banque-zitouna-nabil-el-madani-limoge_52322",
@@ -122,12 +122,18 @@ if db_exists:
     )
     
 else:
+    print("Creating new vector store...")
     stock_vector_store = Chroma(
             collection_name="stock_collection",
             persist_directory=db_location,
             embedding_function=embedding_model,
         )
-    _ =stock_vector_store.add_texts(process_stock_data(data_path))
+    print("Adding stock csv data to vector store...")
+    _=stock_vector_store.add_texts(process_stock_data(data_path))
+    print("Adding urls data to vector store...")
     _ =stock_vector_store.add_documents(process_urls(urls))
+    print("Vector store created and data added.")
+    
+
 
     

@@ -3,12 +3,11 @@ from langgraph.graph import StateGraph, END,  START
 from langchain_core.documents import Document
 from langchain_community.tools.tavily_search import TavilySearchResults
 
-from utils import *
 from dotenv import load_dotenv
+from utils import *
+
 
 load_dotenv()
-
-
 
 
 class State(TypedDict):

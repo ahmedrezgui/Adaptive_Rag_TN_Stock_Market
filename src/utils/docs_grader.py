@@ -1,4 +1,6 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
+
+from langchain_ollama import ChatOllama
+from langchain_ollama import ChatOllama
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 
@@ -17,7 +19,7 @@ class GradeDocuments(BaseModel):
             description="Documents are relevnt to the question, 'yes' or 'no' "
         )
 
-chat_model = ChatGoogleGenerativeAI(model=model_name, temperature=0)
+chat_model = ChatOllama(model="deepseek-r1:1.5b", temperature=0)
 
 
 
