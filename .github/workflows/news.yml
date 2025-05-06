@@ -31,10 +31,10 @@ jobs:
         run: |
           source $HOME/miniconda/bin/activate
           conda init bash
-          conda env create --file environment.yml --name Stock_Price_Prediction
+          conda env create --file environment.yml --name Adaptive_Rag
 
       - name: Extract and Store News Articles
         run: |
             source $HOME/miniconda/bin/activate
-            conda activate Stock_Price_Prediction 
+            conda activate Adaptive_Rag 
             python -m scripts.news_scraper 
