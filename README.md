@@ -1,6 +1,6 @@
 # Adaptive_Rag_TN_Stock_Market
 
-This project implements an **Adaptive RAG (Retrieval-Augmented Generation)** system to assist users in making **stock market investment decisions** based on real-time information and relevant documents. The system uses **LangChain**, **LangGraph**, and **ChromaDB** for vector storage, providing an intelligent, self-reflecting agent capable of improving the results through query refinement and web search integration.
+This project implements an **Adaptive RAG (Retrieval-Augmented Generation)** system to assist users in making **stock market investment decisions** based on real-time information and relevant documents. The system uses **LangChain**, **LangGraph**, and **Pinecone** for vector storage, providing an intelligent, self-reflecting agent capable of improving the results through query refinement and web search integration.
 
 ## Features
 
@@ -37,18 +37,19 @@ The following diagram represents the architecture of the **Adaptive RAG** system
    git clone https://github.com/ahmedrezgui/Adaptive_Rag_TN_Stock_Market.git
    ```
 
-2. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+2. Create a Virtual Environment and install Dependencies:
+```bash
+conda env create -f environment.yml
 
+conda activate Adaptive_Rag
+```
 
 ## Usage
 
 1. **Run the Streamlit Web Interface**:
    After setting up the project, navigate to the project directory and start the Streamlit application:
    ```bash
-   streamlit run main.py
+   streamlit run src/main.py
    ```
 
 2. **Interact with the System**:

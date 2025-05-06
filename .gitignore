@@ -176,5 +176,3 @@ cython_debug/
 #Raw data files
 *.csv
 
-#chroma db location
-/chroma_db

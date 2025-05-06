@@ -1,0 +1,19 @@
+name: Adaptive_Rag
+dependencies:
+  - python=3.11.0
+  - pandas
+  - numpy
+  - pytest
+  - pip
+  - pip:
+      - streamlit
+      - requests_cache
+      - langchain
+      - langgraph
+      - langchain-community
+      - langchain-google-genai
+      - pinecone-client
+      - langchain-pinecone
+      - pinecone-notebooks
+      - chonkie
+      - markitdown
