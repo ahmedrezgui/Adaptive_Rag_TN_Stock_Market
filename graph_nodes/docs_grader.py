@@ -1,6 +1,4 @@
-
-from langchain_ollama import ChatOllama
-from langchain_ollama import ChatOllama
+from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 
@@ -9,17 +7,18 @@ import os
 
 
 load_dotenv()
-model_name = os.environ.get('LLM_MODEL')
 
+model_name= os.getenv("LLM_MODEL")
+api_key= os.getenv("GOOGLE_API_KEY_1")
 
 class GradeDocuments(BaseModel):
         """ Binary score for relevence check for retrived documents"""
 
         binary_score: str =Field(
-            description="Documents are relevnt to the question, 'yes' or 'no' "
+            description="Documents are relevent to the question, 'yes' or 'no' "
         )
 
-chat_model = ChatOllama(model="deepseek-r1:1.5b", temperature=0)
+chat_model = ChatGoogleGenerativeAI(model=model_name, temperature=0, google_api_key=api_key )
 
 
 

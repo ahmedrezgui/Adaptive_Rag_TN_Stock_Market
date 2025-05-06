@@ -7,7 +7,7 @@ import base64
 import torch
 
 
-from utils import process_pdf
+
 from rag_system import create_workflow
 
 torch.classes.__path__ = []
@@ -56,16 +56,16 @@ with st.sidebar:
 
     if uploaded_file is not None:
         # If there's a new file and we haven't set pdf_tool yet...
-        if st.session_state.pdf_tool is None:
-            with tempfile.TemporaryDirectory() as temp_dir:
-                temp_file_path = os.path.join(temp_dir, uploaded_file.name)
-                with open(temp_file_path, "wb") as f:
-                    f.write(uploaded_file.getvalue())
+        # if st.session_state.pdf_tool is None:
+        #     with tempfile.TemporaryDirectory() as temp_dir:
+        #         temp_file_path = os.path.join(temp_dir, uploaded_file.name)
+        #         with open(temp_file_path, "wb") as f:
+        #             f.write(uploaded_file.getvalue())
 
-                with st.spinner("Indexing PDF... Please wait..."):
-                    st.session_state.pdf_tool = process_pdf(file_path=temp_file_path)
+        #         with st.spinner("Indexing PDF... Please wait..."):
+        #             st.session_state.pdf_tool = process_pdf(file_path=temp_file_path)
             
-            st.success("PDF indexed! Ready to chat.")
+        st.success("PDF indexed! Ready to chat.")
 
         # Optionally display the PDF in the sidebar
         display_pdf(uploaded_file.getvalue(), uploaded_file.name)

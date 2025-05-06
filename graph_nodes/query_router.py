@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-model_name = os.environ.get('LLM_MODEL')
+model_name = os.getenv('LLM_MODEL')
 
 # Data model
 class RouteQuery(BaseModel):
